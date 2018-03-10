@@ -4,8 +4,10 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -24,6 +26,8 @@ public class SessaoController {
 	@Autowired 
 	private FilmeDao filmeDao;
 	
+	@PostMapping("/admin/sessao")
+	@Transactional
 	public ModelAndView salva(@Valid SessaoForm form, BindingResult result){
 		if(result.hasErrors()){
 			return form(form.getSalaId(), form);
@@ -38,7 +42,7 @@ public class SessaoController {
 		form.setSalaId(salaId);
 		ModelAndView modelAndView = new ModelAndView("sessao/sessao");
 		modelAndView.addObject("sala", salaDao.findOne(salaId));
-		modelAndView.addObject("filme", filmeDao.findAll());
+		modelAndView.addObject("filmes", filmeDao.findAll());
 		modelAndView.addObject("form", form);
 		return modelAndView;
 	}
